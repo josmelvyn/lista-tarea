@@ -22,6 +22,16 @@ function App() {
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
   }, [tasks]);
+  
+  //container de tareas
+  const taskContainerStyle: React.CSSProperties = {
+    maxHeight: '300px',
+    overflowY: 'auto',
+    border: '1px solid #494949ff',
+    backgroundColor: '#ccc9c9ff',
+    padding: '10px',
+    marginTop: '10px'
+  };
   // Agrega tarea
   const addTask = () => {
     if (!newTask.trim()) return; // Evita agregar tareas vacías{
@@ -33,6 +43,21 @@ function App() {
       setTasks([...tasks, task]);
       setNewTask(''); // Limpiar el campo de entrada
     };
+    // editTask
+    const editTask = (id: number , newText: string) => {
+      setTasks(tasks.map(task => 
+        task.id === id ? { ...task, text: newText } : task
+      ));
+    }
+
+    //fecha tareas  
+    const getFormattedDate = (date: Date): string => {
+      const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
+      return date.toLocaleDateString(undefined, options);
+    };
+    const currentDate = new Date();
+    const formattedDate = getFormattedDate(currentDate);
+    console.log(formattedDate); // Ejemplo de uso
       
   // Elimina tarea
   const deleteTask = (id: number) => {
@@ -48,18 +73,22 @@ function App() {
       task.id === id ? { ...task, completed: !task.completed } : task
     ));
   };
-
+  
   return (
    <div>
       <h1>Lista de Tareas</h1>
       <input 
         type="text"
-        value={newTask} 
+        value={newTask}
         onChange={(e) => setNewTask(e.target.value)} 
         placeholder="Nueva tarea" 
       />
+      <input type="text" value={formattedDate} readOnly />
       <button onClick={addTask}>Agregar</button>
-      <ul>
+      <ul style={taskContainerStyle}>
+        <ul>
+          {tasks.length === 0 && <li>No hay tareas Agrege Una</li>}
+        </ul>
         {tasks.map(task => (
           <li key={task.id}>
             <span 
@@ -67,11 +96,20 @@ function App() {
               onClick={() => toggleTaskCompletion(task.id)}
             >
               {task.text}
+              {getFormattedDate(new Date(task.id))}
+              {task.completed ? ' (Completada)' : ''}
+              {Date.now() - task.id > 86400000 && ' (Vencida)'}
             </span>
             <button onClick={() => deleteTask(task.id)}>Eliminar</button>
+            <button onClick={() => {
+              const newText = prompt('Editar tarea', task.text);
+              if (newText !== null && newText.trim() !== '') {
+                editTask(task.id, newText);
+              }
+            }}>Editar</button>
           </li>
         ))}
-         <button onClick={clearTasks}>Eliminar todas las tareas</button>
+         <button onClick={clearTasks}>Eliminar todas las tareas</button> 
       </ul>
     </div>
   );
