@@ -39,7 +39,7 @@
   width: 300px;
   text-align: center;
   background-color: #00fd7f;
-  color: #0a0705;
+  color: #000000;
 }
 #root button{
   padding: 0.5rem 1rem;
@@ -56,8 +56,15 @@
   list-style: none;
   padding: 0;
   margin-top: 2rem;
-  color: rgb(12, 12, 12);
+  color: rgb(0, 0, 0);
   font-size: 1.5rem;
+  max-width: 600px;
+  margin: 2rem auto 0 auto;
+  text-align: left;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 0rem;
+  border-radius: 10px;  
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 #root li{
   display: flex;
@@ -97,18 +104,54 @@
 #root li button{
   margin-left: 1rem;
 }
-#root li button{
-  margin-right: 0;
+ul li task.completed {
+  text-decoration: line-through;
+  color: gray;
 }
-#root li button{
-  margin-left: 0;
+
+/* Estilos para el input de fecha */
+#root input[type="text"][readonly] {
+  background-color: #e0e0e0;
+  border: none;
+  color: #333;
+  cursor: not-allowed;
+  margin-left: 1rem;
+  width: 200px;
 }
-#root li button{
-  margin-right: 1rem;
+#root input[type="text"][readonly]:focus {
+  outline: none;
+  box-shadow: none;
 }
-#root li button{
+#root input[type="text"][readonly]::placeholder {
+  color: #999;
+} 
+ /* Espacion entre tex y fecha */
+#root input[type="text"] {
   margin-left: 1rem;
 }
-#root li button{
-  margin-right: 0;
+/* espacio entre task.text y getFormattedDate */
+#root li span {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#root li span div {
+  margin-left: 1rem;
+  font-size: 0.8rem;
+  color: #555;
+}
+/* color boton editar */
+#root li button.edit {
+  background-color: #4CAF50; /* Verde */
+  color: white;
+}
+#root li button.edit:hover {
+  background-color: #45a049; /* Verde oscuro */
+}
+#root li button.edit:focus {
+  outline: none;
+  box-shadow: 0 0 5px #45a049;
+}
+#root li button.edit:active {
+  transform: scale(0.95);
 }
