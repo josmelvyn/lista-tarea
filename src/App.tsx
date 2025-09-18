@@ -4,6 +4,7 @@ interface Task {
   id: number;
   text:string;
   completed: boolean;
+  
 }
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
     maxHeight: '300px',
     overflowY: 'auto',
     border: '1px solid #494949ff',
-    backgroundColor: '#ccc9c9ff',
+    backgroundColor: '#727272ff',
     padding: '10px',
     marginTop: '10px'
   };
@@ -76,6 +77,7 @@ function App() {
   
   return (
    <div>
+    <img src="https://cdn-icons-png.flaticon.com/512/9839/9839259.png" alt="Logo" style={{ width: '100px', height: '100px' }}/>
       <h1>Lista de Tareas</h1>
       <input 
         type="text"
@@ -84,7 +86,7 @@ function App() {
         placeholder="Nueva tarea" 
       />
       <input type="text" value={formattedDate} readOnly />
-      <button onClick={addTask}>Agregar</button>
+      <button onClick={addTask}style={{background:"green"}}>Agregar</button>
       <ul style={taskContainerStyle}>
         <ul>
           {tasks.length === 0 && <li>No hay tareas Agrege Una</li>}
@@ -106,10 +108,10 @@ function App() {
               if (newText !== null && newText.trim() !== '') {
                 editTask(task.id, newText);
               }
-            }}>Editar</button>
+            }} style={{background:"yellow",color:"black"}}>Editar</button>
           </li>
         ))}
-         <button onClick={clearTasks}>Eliminar todas las tareas</button> 
+         <button onClick={clearTasks}style={{background:"red"}}>Eliminar todas las tareas</button> 
       </ul>
     </div>
   );
