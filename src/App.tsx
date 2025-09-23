@@ -1,13 +1,50 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import './menu.css'
 interface Task {
   id: number;
   text:string;
   completed: boolean;
   
 }
+interface MenuItem {
+  id: string;
+  label: string;
+  icon?: string;
+  action?: () => void;
+  subMenu?: MenuItem[];
+  separator?: boolean;
+  disabled?: boolean;
+}
+const mainMenu: MenuItem[] = [
+  {id:"file", label:"File", subMenu:[
+      {id:"new", label:"New", icon:"icon-new", action: () => console.log("new file")},
+      {id:"open", label:"Open", icon:"icon-open", action: () => console.log("open file")},
+      {id:"save", label:"Save", icon:"icon-save", action: () => console.log("save file")},
+]},
 
-function App() {
+];
+
+mainMenu.push(
+  {id:"edit", label:"Edit", subMenu:[
+      {id:"undo", label:"Undo", icon:"icon-undo", action: () => console.log("undo action")},  
+      {id:"redo", label:"Redo", icon:"icon-redo", action: () => console.log("redo action")},
+      {id:"cut", label:"Cut", icon:"icon-cut", action: () => console.log("cut action")},
+      {id:"copy", label:"Copy", icon:"icon-copy", action: () => console.log("copy action")},
+      {id:"paste", label:"Paste", icon:"icon-paste", action: () => console.log("paste action")},
+]}, 
+  {id:"view", label:"View", subMenu:[
+      {id:"zoomIn", label:"Zoom In", icon:"icon-zoomin", action: () => console.log("zoom in")},
+      {id:"zoomOut", label:"Zoom Out", icon:"icon-zoomout", action: () => console.log("zoom out")}, 
+      {id:"resetZoom", label:"Reset Zoom", icon:"icon-resetzoom", action: () => console.log("reset zoom")},
+]}, 
+  {id:"help", label:"Help", subMenu:[
+      {id:"documentation", label:"Documentation", icon:"icon-docs", action: () => console.log("open documentation")},
+      {id:"about", label:"About", icon:"icon-about", action: () => console.log("about this app")},
+]}
+);
+
+      function App() {
   const [tasks, setTasks] = useState<Task[]>(() => {
     const savedTasks = localStorage.getItem('tasks');
     return savedTasks ? JSON.parse(savedTasks) : [];
@@ -23,8 +60,23 @@ function App() {
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
   }, [tasks]);
+
+ // notificar tarea vencida
+ useEffect(() => {
+  const interval = setInterval(() => {   
+    const now = Date.now();
+    tasks.forEach(task => {
+      if (!task.completed && now - task.id > 86400000) { // 86400000 ms = 24 horas
+        alert(`La tarea "${task.text}" ha vencido!`);
+      }
+    });
+  }, 60000); // Verificar cada minuto
+  return () => clearInterval(interval);
+}, [tasks]);
+
+
   
-  //container de tareas
+
   const taskContainerStyle: React.CSSProperties = {
     maxHeight: '300px',
     overflowY: 'auto',
@@ -56,6 +108,7 @@ function App() {
       const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
       return date.toLocaleDateString(undefined, options);
     };
+
     const currentDate = new Date();
     const formattedDate = getFormattedDate(currentDate);
     console.log(formattedDate); // Ejemplo de uso
